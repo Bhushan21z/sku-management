@@ -7,4 +7,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  post "api/v1/orders", to: "orders#create"
+  post "api/v1/orders/:id/lock", to: "orders#lock"
+  get "api/v1/sku-summary/:id", to: "sku_summary#show"
 end

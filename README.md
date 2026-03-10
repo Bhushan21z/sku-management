@@ -1,24 +1,42 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+API for order sku managements
 
-Things you may want to cover:
+1. POST /api/v1/orders
+REQUEST
 
-* Ruby version
+```json
+{
+  "external_id": "abcd",
+  "plcaed_at": "2026-03-10",
+  "line_items": [
+      { "sku": "SKU1", "quantity": 10 }, 
+      { "sku": "SKU2", "quantity": 5 }
+   ]
+}
+```
 
-* System dependencies
+2. POST /api/v1/orders/:id/lock
 
-* Configuration
+3. GET /api/v1/sku-summary/:id
 
-* Database creation
+RESPONSE
 
-* Database initialization
+```json
+{
+    "sku": "SKU1",
+    "summary": [
+      { "week": "2026-W15", "total_quantity": 10 }, 
+      { "week": "2026-W16", "total_quantity": 5 }
+   ]
+}
+```
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+Background (Async) Job to calculate sku stats
 
-* Deployment instructions
+1. When new order query is recieved either (create/update) we will update order details and line_items.
+2. Enqueue a job to recalculate sku_stats for new entries per week.
+3. Skus are grouped by weeks and total quantity for the sku is calculated.
 
 * ...

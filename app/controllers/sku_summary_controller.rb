@@ -1,6 +1,6 @@
 class SkuSummaryController < ApplicationController
   def show
-    stats = SkuStats.where(sku: params[:sku])
+    stats = SkuStat.where(sku: params[:sku])
 
     render json: {
       success: true,

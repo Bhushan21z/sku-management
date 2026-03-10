@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
   has_many :line_items
+  validates :external_id, presence: true
 
   def self.process(order_params)
     Order.transaction do
@@ -21,7 +22,8 @@ class Order < ApplicationRecord
         #   create_line_items(order, item)
         # end
       end
-      # enqueue job for sku stats
+      skus = order_params[:line_items].map { |i| i[:sku] }
+      CalculateSkuStatsJob.perform_later(skus)
       order
     end
   end
